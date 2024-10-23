@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallpaper Gallery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Wallpaper Gallery</h1>
+        <p>Upload and share your favorite wallpapers!</p>
+    </header>
+
+    <main>
+        <section class="upload-form">
+            <h2>Upload Wallpaper</h2>
+            <form id="uploadForm">
+                <input type="file" id="wallpaperInput" accept="image/*" required>
+                <button type="submit">Upload</button>
+            </form>
+        </section>
+
+        <section class="gallery">
+            <h2>Gallery</h2>
+            <div id="wallpaperContainer"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Wallpaper Gallery</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+header {
+    background-color: #6200ea;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    padding: 20px;
+}
+
+.upload-form {
+    margin-bottom: 30px;
+}
+
+    .upload-form h2, .gallery h2 {
+        color: #6200ea;
+    }
+
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: #6200ea;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+    button:hover {
+        background-color: #3700b3;
+    }
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wallpaper {
+    margin: 10px;
+    border: 2px solid #6200ea;
+    border-radius: 5px;
+}
+
+    .wallpaper img {
+        max-width: 300px;
+        max-height: 200px;
+        border-radius: 5px 5px 0 0;
+    }
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #6200ea;
+    color: white;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
