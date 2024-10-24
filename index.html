@@ -31,9 +31,9 @@
         <p>&copy; 2024 Wallpaper Gallery</p>
     </footer>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+    <!-- Firebase SDK - Use Firebase 8.x instead of 9.x -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <script>
         // Your web app's Firebase configuration (replace these with your actual project details)
@@ -47,8 +47,8 @@
         };
 
         // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
+        firebase.initializeApp(firebaseConfig);
+        var storage = firebase.storage();
     </script>
 
     <script src="script.js"></script>
