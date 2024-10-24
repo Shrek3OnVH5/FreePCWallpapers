@@ -31,6 +31,26 @@
         <p>&copy; 2024 Wallpaper Gallery</p>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration (replace these with your actual project details)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfaamjVRyS0ed_DVaXcl9Tu-7a_t08svY",
+            authDomain: "freepcwallpapers.firebaseapp.com",
+            projectId: "freepcwallpapers",
+            storageBucket: "freepcwallpapers.appspot.com",
+            messagingSenderId: "959678886023",
+            appId: "1:959678886023:web:a709d3335f79cc1fed0822"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+    </script>
+
     <script src="script.js"></script>
 </body>
 </html>
