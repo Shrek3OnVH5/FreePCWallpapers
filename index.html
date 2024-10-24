@@ -38,6 +38,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
     <script>
         // Your Firebase configuration
@@ -53,6 +54,7 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         var storage = firebase.storage();
+        var database = firebase.database();
 
         // Handle wallpaper upload
         document.getElementById('uploadForm').addEventListener('submit', function (event) {
@@ -68,7 +70,11 @@
                 storageRef.put(file).then(function () {
                     // Get the download URL after upload
                     storageRef.getDownloadURL().then(function (url) {
-                        createNewImagePage(url);
+                        // Save the image URL to the Firebase Realtime Database
+                        database.ref('wallpapers').push({
+                            url: url
+                        });
+                        displayWallpaper(url); // Display the image in the gallery
                     });
                 });
 
@@ -77,38 +83,26 @@
             }
         });
 
-        // Create a new image page using hash-based routing
-        function createNewImagePage(imageUrl) {
-            // Generate unique URL with the image hash
-            const newPageUrl = `${window.location.href.split('#')[0]}#image=${encodeURIComponent(imageUrl)}`;
+        // Load wallpapers from Firebase Realtime Database on page load
+        window.onload = function () {
+            database.ref('wallpapers').once('value', function (snapshot) {
+                snapshot.forEach(function (childSnapshot) {
+                    var imageUrl = childSnapshot.val().url;
+                    displayWallpaper(imageUrl); // Display each image in the gallery
+                });
+            });
+        };
 
-            // Redirect to the new URL
-            window.location.href = newPageUrl;
+        // Function to display wallpaper in the gallery
+        function displayWallpaper(imageUrl) {
+            const wallpaperContainer = document.getElementById('wallpaperContainer');
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            imgElement.alt = 'Uploaded Wallpaper';
+            imgElement.style.maxWidth = '100%';
+            imgElement.style.height = 'auto';
+            wallpaperContainer.appendChild(imgElement);
         }
-
-        // Load image from URL hash
-        function loadImageFromHash() {
-            const hash = window.location.hash;
-            if (hash.startsWith("#image=")) {
-                const imageUrl = decodeURIComponent(hash.split('=')[1]);
-
-                // Hide upload and gallery sections
-                document.getElementById('uploadSection').style.display = 'none';
-                document.getElementById('gallerySection').style.display = 'none';
-
-                // Display the image viewer section
-                const imageViewerSection = document.getElementById('imageViewerSection');
-                imageViewerSection.style.display = 'block';
-
-                // Display the image
-                const imageDisplay = document.getElementById('imageDisplay');
-                imageDisplay.innerHTML = `<img src="${imageUrl}" alt="Uploaded Wallpaper" style="max-width: 100%; height: auto;">`;
-            }
-        }
-
-        // Load image when page loads based on hash
-        window.addEventListener('load', loadImageFromHash);
-        window.addEventListener('hashchange', loadImageFromHash); // Handle hash changes
     </script>
 </body>
 </html>
