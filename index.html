@@ -13,7 +13,7 @@
     </header>
 
     <main>
-        <section class="upload-form">
+        <section class="upload-form" id="uploadSection">
             <h2>Upload Wallpaper</h2>
             <form id="uploadForm">
                 <input type="file" id="wallpaperInput" accept="image/*" required>
@@ -21,9 +21,13 @@
             </form>
         </section>
 
-        <section class="gallery">
+        <section class="gallery" id="gallerySection">
             <h2>Gallery</h2>
             <div id="wallpaperContainer"></div>
+        </section>
+
+        <section class="image-viewer" id="imageViewerSection" style="display:none;">
+            <div id="imageDisplay"></div>
         </section>
     </main>
 
@@ -31,26 +35,80 @@
         <p>&copy; 2024 Wallpaper Gallery</p>
     </footer>
 
-    <!-- Firebase SDK - Use Firebase 8.x instead of 9.x -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
 
     <script>
-        // Your web app's Firebase configuration (replace these with your actual project details)
-        const firebaseConfig = {
-            apiKey: "AIzaSyDfaamjVRyS0ed_DVaXcl9Tu-7a_t08svY",
-            authDomain: "freepcwallpapers.firebaseapp.com",
-            projectId: "freepcwallpapers",
-            storageBucket: "freepcwallpapers.appspot.com",
-            messagingSenderId: "959678886023",
-            appId: "1:959678886023:web:a709d3335f79cc1fed0822"
+        // Your Firebase configuration
+        var firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         var storage = firebase.storage();
-    </script>
 
-    <script src="script.js"></script>
+        // Handle wallpaper upload
+        document.getElementById('uploadForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const wallpaperInput = document.getElementById('wallpaperInput');
+            const file = wallpaperInput.files[0];
+
+            if (file) {
+                const storageRef = storage.ref('wallpapers/' + file.name);
+
+                // Upload the file to Firebase Storage
+                storageRef.put(file).then(function () {
+                    // Get the download URL after upload
+                    storageRef.getDownloadURL().then(function (url) {
+                        createNewImagePage(url);
+                    });
+                });
+
+                // Reset the form
+                wallpaperInput.value = '';
+            }
+        });
+
+        // Create a new image page using hash-based routing
+        function createNewImagePage(imageUrl) {
+            // Generate unique URL with the image hash
+            const newPageUrl = `${window.location.href.split('#')[0]}#image=${encodeURIComponent(imageUrl)}`;
+
+            // Redirect to the new URL
+            window.location.href = newPageUrl;
+        }
+
+        // Load image from URL hash
+        function loadImageFromHash() {
+            const hash = window.location.hash;
+            if (hash.startsWith("#image=")) {
+                const imageUrl = decodeURIComponent(hash.split('=')[1]);
+
+                // Hide upload and gallery sections
+                document.getElementById('uploadSection').style.display = 'none';
+                document.getElementById('gallerySection').style.display = 'none';
+
+                // Display the image viewer section
+                const imageViewerSection = document.getElementById('imageViewerSection');
+                imageViewerSection.style.display = 'block';
+
+                // Display the image
+                const imageDisplay = document.getElementById('imageDisplay');
+                imageDisplay.innerHTML = `<img src="${imageUrl}" alt="Uploaded Wallpaper" style="max-width: 100%; height: auto;">`;
+            }
+        }
+
+        // Load image when page loads based on hash
+        window.addEventListener('load', loadImageFromHash);
+        window.addEventListener('hashchange', loadImageFromHash); // Handle hash changes
+    </script>
 </body>
 </html>
